@@ -5,8 +5,19 @@ require_once "../src/Worker.php";
 
 $queue = new Queue(__DIR__ . "/queue.json");
 
-$queue->push(["type"=>"email", "user"=>1]);
-$queue->push(["type"=>"email", "user"=>2]);
+$queue->push([
+	"id" => uniqid(),
+	"type" => "email",
+	"user" => 1,
+	"attempts" => 0
+]);
+
+$queue->push([
+	"id" => uniqid(),
+	"type" => "email",
+	"user" => 2,
+	"attempts" => 0
+]);
 
 $worker = new Worker($queue);
 
