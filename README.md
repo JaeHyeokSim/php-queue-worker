@@ -4,9 +4,11 @@ Simple file-based queue worker in PHP.
 
 ## Features
 
-- push jobs
-- pop jobs
-- worker processing loop
+- File based queue
+- Worker processing loop
+- Job retry mechanism
+- Job id tracking
+- Worker logging
 
 ## Example
 
