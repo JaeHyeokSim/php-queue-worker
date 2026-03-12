@@ -1,25 +1,42 @@
 <?php
 
-class Worker {
+class Worker
+{
 
-	private $queue;
+    private $queue;
 
-	public function __construct($queue) {
-		$this->queue = $queue;
-	}
+    public function __construct($queue)
+    {
+        $this->queue = $queue;
+    }
 
-	public function run(callable $handler) {
+    public function run(callable $handler)
+    {
 
-		while (true) {
+        while (true) {
 
-			$job = $this->queue->pop();
+            $job = $this->queue->pop();
 
-			if (!$job) {
-				sleep(1);
-				continue;
-			}
+            if (!$job) {
+                sleep(1);
+                continue;
+            }
 
-			$handler($job);
-		}
-	}
+            try {
+
+                $handler($job);
+            } catch (Exception $e) {
+
+                $job["attempts"]++;
+
+                if ($job["attempts"] < 3) {
+
+                    $this->queue->push($job);
+                } else {
+
+                    echo "Job failed permanently: " . $job["id"] . "\n";
+                }
+            }
+        }
+    }
 }
