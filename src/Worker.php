@@ -24,6 +24,8 @@ class Worker
 
             try {
 
+                echo "[" . date("Y-m-d H:i:s") . "] Processing job {$job['id']}\n";
+
                 $handler($job);
             } catch (Exception $e) {
 
